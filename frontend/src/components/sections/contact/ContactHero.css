@@ -1,0 +1,47 @@
+.contact-hero {
+  padding: 6rem 0 4rem;
+  background: var(--bg-primary);
+  text-align: center;
+}
+
+.contact-hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.contact-hero-icon {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  border-radius: 50%;
+  font-size: 3rem;
+  color: var(--accent);
+}
+
+.contact-hero-title {
+  font-size: 4rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+}
+
+.contact-hero-description {
+  font-size: 1.3rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+@media (max-width: 768px) {
+  .contact-hero-title {
+    font-size: 2.5rem;
+  }
+
+  .contact-hero-description {
+    font-size: 1.1rem;
+  }
+}
+

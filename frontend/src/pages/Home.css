@@ -1,0 +1,12 @@
+.home-page {
+  padding-top: 70px;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.home-page.splash-active {
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
