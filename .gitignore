@@ -1,0 +1,64 @@
+# Dependencies
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+python_api/__pycache__/
+python_api/venv/
+python_api/env/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+backend/.env
+frontend/.env
+
+# Build outputs
+frontend/build/
+backend/dist/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python
+*.pyc
+__pycache__/
+.pytest_cache/
+
+# MongoDB
+data/
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Node
+node_modules/
+
+# Env files
+.env
+
+# Model files (optional if large)
+*.h5
+*.pt
+*.onnx
+
+# OS
+.DS_Store
