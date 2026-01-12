@@ -112,11 +112,11 @@ const EmotionReport = ({ result, image, onClose, onDownload }) => {
           </div>
           <div className="report-actions">
             {onDownload && (
-              <button onClick={onDownload}>
+              <button className="report-download-btn" onClick={onDownload}>
                 <FiDownload /> Download
               </button>
             )}
-            <button onClick={onClose}>
+            <button className="report-close-btn" onClick={onClose} aria-label="Close report">
               <FiX />
             </button>
           </div>

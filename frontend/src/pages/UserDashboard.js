@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiSmile, FiUser, FiArrowRight, FiLogOut, FiImage } from 'react-icons/fi';
+import ScrollAnimation from '../components/ScrollAnimation';
 import './UserDashboard.css';
 
 const UserDashboard = () => {
@@ -27,12 +28,7 @@ const UserDashboard = () => {
   return (
     <div className="user-dashboard-page">
       <div className="container">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="dashboard-wrapper"
-        >
+        <ScrollAnimation direction="up" className="dashboard-wrapper">
           <div className="dashboard-header">
             <div className="welcome-section">
               <h1 className="welcome-title">
@@ -48,13 +44,7 @@ const UserDashboard = () => {
           </div>
 
           <div className="dashboard-options">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="option-card emotion-card"
-              onClick={() => navigate('/emotion-detection')}
-            >
+            <ScrollAnimation delay={0.1} direction="right" className="option-card emotion-card" onClick={() => navigate('/emotion-detection')}>
               <div className="option-icon emotion-icon">
                 <FiSmile />
               </div>
@@ -74,15 +64,9 @@ const UserDashboard = () => {
               <div className="option-arrow">
                 <FiArrowRight />
               </div>
-            </motion.div>
+            </ScrollAnimation>
 
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="option-card profile-card"
-              onClick={() => navigate('/profile')}
-            >
+            <ScrollAnimation delay={0.2} direction="left" className="option-card profile-card" onClick={() => navigate('/profile')}>
               <div className="option-icon profile-icon">
                 <FiUser />
               </div>
@@ -101,15 +85,9 @@ const UserDashboard = () => {
               <div className="option-arrow">
                 <FiArrowRight />
               </div>
-            </motion.div>
+            </ScrollAnimation>
 
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="option-card image-card"
-              onClick={() => navigate('/image-analyses')}
-            >
+            <ScrollAnimation delay={0.3} direction="right" className="option-card image-card" onClick={() => navigate('/image-analyses')}>
               <div className="option-icon image-icon">
                 <FiImage />
               </div>
@@ -129,30 +107,20 @@ const UserDashboard = () => {
               <div className="option-arrow">
                 <FiArrowRight />
               </div>
-            </motion.div>
+            </ScrollAnimation>
           </div>
 
           <div className="dashboard-quick-stats">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="quick-stat"
-            >
+            <ScrollAnimation delay={0.4} direction="up" className="quick-stat">
               <div className="stat-value">Member</div>
               <div className="stat-label">Since {new Date(user.createdAt || Date.now()).toLocaleDateString()}</div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="quick-stat"
-            >
+            </ScrollAnimation>
+            <ScrollAnimation delay={0.5} direction="up" className="quick-stat">
               <div className="stat-value">{user.role === 'admin' ? 'Admin' : 'User'}</div>
               <div className="stat-label">Account Type</div>
-            </motion.div>
+            </ScrollAnimation>
           </div>
-        </motion.div>
+        </ScrollAnimation>
       </div>
     </div>
   );

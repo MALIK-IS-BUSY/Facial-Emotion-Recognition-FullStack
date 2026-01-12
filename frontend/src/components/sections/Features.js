@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { FiZap, FiShield, FiTrendingUp, FiCpu, FiEye, FiGlobe } from 'react-icons/fi';
 import ScrollAnimation from '../../components/ScrollAnimation';
 import './Features.css';
@@ -59,6 +58,7 @@ const Features = () => {
             <ScrollAnimation
               key={index}
               delay={index * 0.1}
+              direction="up"
               className="feature-card-wrapper"
             >
               <div className="feature-card">

@@ -55,7 +55,10 @@ const Hero = () => {
 
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${particle.opacity})`;
+        // Use theme colors instead of white
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const color = isDark ? '255, 255, 255' : '0, 0, 0';
+        ctx.fillStyle = `rgba(${color}, ${particle.opacity * 0.3})`;
         ctx.fill();
       });
 
@@ -77,16 +80,11 @@ const Hero = () => {
     <section className="hero">
       <canvas ref={canvasRef} className="hero-canvas" />
       <div className="hero-content">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="hero-text"
-        >
+        <ScrollAnimation direction="right" distance={100} delay={0.2} className="hero-text">
           <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: "spring" }}
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
             className="hero-icon"
           >
             <FiSmile />
@@ -116,13 +114,8 @@ const Hero = () => {
               Learn More
             </Link>
           </div>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="hero-image"
-        >
+        </ScrollAnimation>
+        <ScrollAnimation direction="left" distance={100} delay={0.3} className="hero-image">
           <div className="hero-image-placeholder">
             <img 
               src="https://images.unsplash.com/photo-1555255707-c07966088b7b?w=1200&h=800&fit=crop&q=80" 
@@ -141,16 +134,16 @@ const Hero = () => {
               </div>
             </div>
           </div>
-        </motion.div>
+        </ScrollAnimation>
       </div>
-      <div className="hero-scroll">
+      <ScrollAnimation direction="up" distance={30} className="hero-scroll">
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 1.5 }}
         >
           <span>Scroll Down</span>
         </motion.div>
-      </div>
+      </ScrollAnimation>
     </section>
   );
 };

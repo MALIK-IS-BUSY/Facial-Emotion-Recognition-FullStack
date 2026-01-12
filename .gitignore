@@ -55,10 +55,20 @@ node_modules/
 # Env files
 .env
 
-# Model files (optional if large)
-*.h5
-*.pt
-*.onnx
+
+# OS
+.DS_Store
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+
+# Environment
+.env
 
 # OS
 .DS_Store

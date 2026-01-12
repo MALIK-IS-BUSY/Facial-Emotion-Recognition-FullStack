@@ -54,3 +54,4 @@ imageAnalysisSchema.index({ user: 1, emotion: 1 });
 
 module.exports = mongoose.model('ImageAnalysis', imageAnalysisSchema);
 
+

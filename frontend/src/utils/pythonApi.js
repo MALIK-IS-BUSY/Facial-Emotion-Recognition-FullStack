@@ -9,15 +9,17 @@ const pythonApi = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10000, // 10 second timeout
+  timeout: 5000, // Reduced to 5 seconds for faster failure detection
 });
 
 /**
  * Convert canvas/video frame to base64
+ * @param {HTMLCanvasElement} canvas - Canvas element to convert
+ * @param {number} quality - JPEG quality (0-1), default 0.5 for faster processing
  */
-export const frameToBase64 = (canvas) => {
+export const frameToBase64 = (canvas, quality = 0.5) => {
   try {
-    return canvas.toDataURL('image/jpeg', 0.8);
+    return canvas.toDataURL('image/jpeg', quality);
   } catch (error) {
     console.error('Error converting frame to base64:', error);
     return null;

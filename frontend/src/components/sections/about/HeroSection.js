@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { FiInfo } from 'react-icons/fi';
 import ScrollAnimation from '../../ScrollAnimation';
 import './HeroSection.css';

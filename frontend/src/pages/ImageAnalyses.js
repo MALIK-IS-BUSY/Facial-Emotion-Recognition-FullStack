@@ -133,11 +133,7 @@ const ImageAnalyses = () => {
   return (
     <div className="image-analyses-page">
       <div className="container">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="analyses-header"
-        >
+        <ScrollAnimation direction="up" className="analyses-header">
           <button className="back-button" onClick={() => navigate('/dashboard')}>
             <FiArrowLeft /> Back to Dashboard
           </button>
@@ -149,7 +145,7 @@ const ImageAnalyses = () => {
               View and manage all your image emotion analyses
             </p>
           </div>
-        </motion.div>
+        </ScrollAnimation>
 
         {error && (
           <motion.div

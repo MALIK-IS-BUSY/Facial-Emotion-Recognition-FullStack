@@ -21,22 +21,25 @@ export const ThemeProvider = ({ children }) => {
       localStorage.setItem('theme', theme);
       document.documentElement.setAttribute('data-theme', theme);
       
+      // Pure black and white theme
       if (theme === 'dark') {
         document.documentElement.style.setProperty('--bg-primary', '#000000');
-        document.documentElement.style.setProperty('--bg-secondary', '#111111');
-        document.documentElement.style.setProperty('--bg-tertiary', '#1a1a1a');
+        document.documentElement.style.setProperty('--bg-secondary', '#0a0a0a');
+        document.documentElement.style.setProperty('--bg-tertiary', '#141414');
         document.documentElement.style.setProperty('--text-primary', '#ffffff');
-        document.documentElement.style.setProperty('--text-secondary', '#cccccc');
+        document.documentElement.style.setProperty('--text-secondary', '#b0b0b0');
         document.documentElement.style.setProperty('--accent', '#ffffff');
-        document.documentElement.style.setProperty('--border', '#333333');
+        document.documentElement.style.setProperty('--border', '#2a2a2a');
+        document.documentElement.style.setProperty('--shadow', 'rgba(255, 255, 255, 0.1)');
       } else {
         document.documentElement.style.setProperty('--bg-primary', '#ffffff');
-        document.documentElement.style.setProperty('--bg-secondary', '#f5f5f5');
-        document.documentElement.style.setProperty('--bg-tertiary', '#e8e8e8');
+        document.documentElement.style.setProperty('--bg-secondary', '#fafafa');
+        document.documentElement.style.setProperty('--bg-tertiary', '#f0f0f0');
         document.documentElement.style.setProperty('--text-primary', '#000000');
-        document.documentElement.style.setProperty('--text-secondary', '#666666');
+        document.documentElement.style.setProperty('--text-secondary', '#4a4a4a');
         document.documentElement.style.setProperty('--accent', '#000000');
-        document.documentElement.style.setProperty('--border', '#e0e0e0');
+        document.documentElement.style.setProperty('--border', '#d0d0d0');
+        document.documentElement.style.setProperty('--shadow', 'rgba(0, 0, 0, 0.1)');
       }
     } catch (error) {
       console.error('Error setting theme:', error);

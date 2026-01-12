@@ -42,14 +42,14 @@
 }
 
 .page-title {
-  font-size: 2.5rem;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
   font-weight: 800;
   color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
 
 .page-subtitle {
-  font-size: 1.2rem;
+  font-size: clamp(0.95rem, 2.5vw, 1.2rem);
   color: var(--text-secondary);
 }
 
@@ -146,7 +146,10 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scaleX(-1); /* Mirror the video horizontally (like a mirror) */
+  /* Mirror the video horizontally (like a mirror) with hardware acceleration */
+  transform: translateZ(0) scaleX(-1);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .detection-canvas {
@@ -156,6 +159,9 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
+  /* Hardware acceleration hints */
+  will-change: contents;
+  transform: translateZ(0);
 }
 
 .video-placeholder {
@@ -264,22 +270,30 @@
   background: var(--bg-secondary);
   padding: 2.5rem;
   border-radius: 20px;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   text-align: center;
   position: sticky;
   top: 100px;
+  animation: scaleIn 0.5s ease-out;
+  box-shadow: 0 10px 30px var(--shadow-lg);
+  transition: var(--transition);
+}
+
+.emotion-display:hover {
+  transform: scale(1.02);
+  box-shadow: 0 15px 40px var(--shadow-xl);
 }
 
 .emotion-icon-large {
-  width: 120px;
-  height: 120px;
+  width: clamp(80px, 15vw, 120px);
+  height: clamp(80px, 15vw, 120px);
   margin: 0 auto 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--bg-primary);
   border-radius: 50%;
-  font-size: 4rem;
+  font-size: clamp(2.5rem, 6vw, 4rem);
   border: 4px solid;
   transition: var(--transition);
 }
@@ -289,7 +303,7 @@
 }
 
 .emotion-label {
-  font-size: 1.8rem;
+  font-size: clamp(1.25rem, 3.5vw, 1.8rem);
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 1.5rem;
@@ -996,29 +1010,27 @@
 @media (max-width: 968px) {
   .detection-container {
     grid-template-columns: 1fr;
+    gap: 2rem;
   }
 
   .emotion-display {
     position: relative;
     top: 0;
   }
-
-  .page-title {
-    font-size: 2rem;
-  }
 }
 
 @media (max-width: 768px) {
   .emotion-detection-page {
     padding-top: calc(70px + 2rem);
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
     padding-bottom: 2rem;
   }
 
   .detection-header {
     flex-direction: column;
     text-align: center;
+    gap: 1rem;
   }
 
   .video-wrapper {
@@ -1026,17 +1038,60 @@
   }
 
   .emotion-display {
-    padding: 2rem;
+    padding: 1.5rem;
   }
 
-  .emotion-icon-large {
-    width: 100px;
-    height: 100px;
-    font-size: 3rem;
+  .emotion-history {
+    padding: 1.5rem;
   }
 
-  .emotion-label {
+  .image-upload-section {
+    width: 100%;
+  }
+
+  .upload-area {
+    padding: 2rem 1.5rem;
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .emotion-detection-page {
+    padding-top: calc(70px + 1.5rem);
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .detection-header {
+    gap: 0.75rem;
+  }
+
+  .emotion-display {
+    padding: 1.25rem;
+  }
+
+  .emotion-history {
+    padding: 1.25rem;
+  }
+
+  .upload-area {
+    padding: 1.5rem 1rem;
+    min-height: 250px;
+  }
+
+  .upload-placeholder h3 {
     font-size: 1.5rem;
+  }
+
+  .images-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
   }
 }
 

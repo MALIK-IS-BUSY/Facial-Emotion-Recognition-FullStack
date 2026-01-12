@@ -5,6 +5,7 @@ import { FiVideo, FiStopCircle, FiSmile, FiAlertCircle, FiArrowLeft, FiInfo, FiU
 import { predictEmotion, frameToBase64, resetClientState, checkPythonApiHealth } from '../utils/pythonApi';
 import EmotionCharts from '../components/EmotionCharts';
 import EmotionReport from '../components/EmotionReport';
+import ScrollAnimation from '../components/ScrollAnimation';
 import api from '../utils/api';
 import './EmotionDetection.css';
 
@@ -70,17 +71,21 @@ const EmotionDetection = () => {
   const startStream = async () => {
     try {
       setError('');
+      // Optimize video constraints for better performance
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { 
-          width: { ideal: 640 },
-          height: { ideal: 480 },
-          facingMode: 'user'
+          width: { ideal: 320, max: 640 },
+          height: { ideal: 240, max: 480 },
+          facingMode: 'user',
+          frameRate: { ideal: 15, max: 30 } // Lower frame rate for better performance
         }
       });
       
       streamRef.current = stream;
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
+        videoRef.current.setAttribute('playsinline', '');
+        videoRef.current.setAttribute('webkit-playsinline', '');
         videoRef.current.play();
         setIsStreaming(true);
         startEmotionDetection();
@@ -110,81 +115,112 @@ const EmotionDetection = () => {
 
   const startEmotionDetection = () => {
     let lastProcessTime = 0;
-    const PROCESS_INTERVAL = 500; // Process every 500ms (2 FPS for API calls)
+    let lastDisplayUpdate = 0;
+    const PROCESS_INTERVAL = 300; // Process every 300ms (~3.3 FPS for API calls) - faster than before
+    const DISPLAY_UPDATE_INTERVAL = 33; // Update display at ~30 FPS for smooth video
+    const TARGET_WIDTH = 320; // Resize to smaller size for faster processing
+    const TARGET_HEIGHT = 240;
 
     const detectEmotion = async () => {
       if (!videoRef.current || !canvasRef.current || !isStreaming) return;
 
       const now = Date.now();
-      const timeSinceLastProcess = now - lastProcessTime;
+      const video = videoRef.current;
+      const displayCanvas = canvasRef.current;
 
-      // Process frame at specified interval
+      // Update display canvas separately for smooth video (at higher FPS)
+      if (now - lastDisplayUpdate >= DISPLAY_UPDATE_INTERVAL) {
+        lastDisplayUpdate = now;
+        if (video.readyState === video.HAVE_ENOUGH_DATA) {
+          const displayCtx = displayCanvas.getContext('2d');
+          // Only resize canvas if dimensions changed
+          if (displayCanvas.width !== video.videoWidth || displayCanvas.height !== video.videoHeight) {
+            displayCanvas.width = video.videoWidth;
+            displayCanvas.height = video.videoHeight;
+          }
+          displayCtx.save();
+          displayCtx.scale(-1, 1);
+          displayCtx.drawImage(video, -displayCanvas.width, 0, displayCanvas.width, displayCanvas.height);
+          displayCtx.restore();
+        }
+      }
+
+      // Process frame for emotion detection at specified interval
+      const timeSinceLastProcess = now - lastProcessTime;
       if (timeSinceLastProcess >= PROCESS_INTERVAL && !isProcessing) {
         lastProcessTime = now;
         setIsProcessing(true);
 
-        try {
-          const video = videoRef.current;
-          const canvas = canvasRef.current;
-          const ctx = canvas.getContext('2d');
+        // Process in next tick to avoid blocking display updates
+        setTimeout(async () => {
+          try {
+            // Check if video is ready
+            if (video.readyState !== video.HAVE_ENOUGH_DATA) {
+              setIsProcessing(false);
+              return;
+            }
 
-          // Set canvas size to match video
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
+            // Create a temporary canvas for processing (smaller size = faster)
+            const processCanvas = document.createElement('canvas');
+            processCanvas.width = TARGET_WIDTH;
+            processCanvas.height = TARGET_HEIGHT;
+            const processCtx = processCanvas.getContext('2d', { willReadFrequently: false });
 
-          // Flip canvas horizontally to mirror the video (like a mirror)
-          ctx.save();
-          ctx.scale(-1, 1);
-          ctx.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
-          ctx.restore();
+            // Draw video to processing canvas (resized and flipped)
+            processCtx.save();
+            processCtx.scale(-1, 1);
+            processCtx.drawImage(video, -TARGET_WIDTH, 0, TARGET_WIDTH, TARGET_HEIGHT);
+            processCtx.restore();
 
-          // Convert canvas to base64
-          const imageBase64 = frameToBase64(canvas);
-          
-          if (imageBase64) {
-            // Send to Python API for emotion detection
-            const result = await predictEmotion(imageBase64, clientIdRef.current);
+            // Convert processing canvas to base64 with lower quality for faster transfer
+            const imageBase64 = processCanvas.toDataURL('image/jpeg', 0.5); // Lower quality = smaller file
             
-            if (result.success && result.emotion) {
-              const newEmotion = {
-                emotion: result.emotion.toLowerCase(),
-                confidence: result.confidence,
-                allEmotions: result.all_emotions || {},
-                timestamp: new Date()
-              };
+            if (imageBase64) {
+              // Send to Python API for emotion detection
+              const result = await predictEmotion(imageBase64, clientIdRef.current);
+              
+              if (result.success && result.emotion) {
+                const newEmotion = {
+                  emotion: result.emotion.toLowerCase(),
+                  confidence: result.confidence,
+                  allEmotions: result.all_emotions || {},
+                  timestamp: new Date()
+                };
 
-              setEmotion(newEmotion);
-              setEmotionHistory(prev => [newEmotion, ...prev].slice(0, 10));
-              setError(''); // Clear any previous errors
+                setEmotion(newEmotion);
+                setEmotionHistory(prev => [newEmotion, ...prev].slice(0, 10));
+                setError(''); // Clear any previous errors
 
-              // Save emotion record every second
-              const now = Date.now();
-              if (now - lastRecordTime >= 1000) {
-                setLastRecordTime(now);
-                saveEmotionRecord(result.emotion, result.confidence);
-              }
-            } else if (result.error) {
-              // No face detected - this is normal, don't show as error
-              if (result.error !== 'No face detected') {
-                setError(result.error);
+                // Save emotion record every second
+                const recordNow = Date.now();
+                if (recordNow - lastRecordTime >= 1000) {
+                  setLastRecordTime(recordNow);
+                  saveEmotionRecord(result.emotion, result.confidence);
+                }
+              } else if (result.error) {
+                // No face detected - this is normal, don't show as error
+                if (result.error !== 'No face detected') {
+                  setError(result.error);
+                }
               }
             }
+          } catch (err) {
+            console.error('Error in emotion detection:', err);
+            // Error is already handled in predictEmotion function
+            if (err.response) {
+              // API responded with error
+              setError(err.response.data?.error || 'Error detecting emotion');
+            } else if (!err.message?.includes('connect')) {
+              // Only show non-connection errors
+              setError(err.message || 'Error detecting emotion');
+            }
+          } finally {
+            setIsProcessing(false);
           }
-        } catch (err) {
-          console.error('Error in emotion detection:', err);
-          // Error is already handled in predictEmotion function
-          if (err.response) {
-            // API responded with error
-            setError(err.response.data?.error || 'Error detecting emotion');
-          } else if (!err.message?.includes('connect')) {
-            // Only show non-connection errors
-            setError(err.message || 'Error detecting emotion');
-          }
-        } finally {
-          setIsProcessing(false);
-        }
+        }, 0);
       }
 
+      // Continue animation loop
       animationFrameRef.current = requestAnimationFrame(detectEmotion);
     };
 
@@ -566,12 +602,7 @@ const EmotionDetection = () => {
   return (
     <div className="emotion-detection-page">
       <div className="container">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="detection-header"
-        >
+        <ScrollAnimation direction="up" className="detection-header">
           <button className="back-button" onClick={() => navigate('/dashboard')}>
             <FiArrowLeft /> Back to Dashboard
           </button>
@@ -588,7 +619,7 @@ const EmotionDetection = () => {
           >
             <FiInfo />
           </button>
-        </motion.div>
+        </ScrollAnimation>
 
         {showInfo && (
           <motion.div

@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
 import { FiPlay, FiPause } from 'react-icons/fi';
 import ScrollAnimation from '../../components/ScrollAnimation';
 import './VideoShowcase.css';

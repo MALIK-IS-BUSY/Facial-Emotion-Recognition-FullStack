@@ -46,8 +46,20 @@ const AdminLogin = () => {
           <motion.div
             className="shape shape-1"
             animate={{
-              y: [0, -30, 0],
-              rotate: [0, 6, 0],
+              y: [0, -20, 0],
+              rotate: [0, 5, 0],
+            }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+          <motion.div
+            className="shape shape-2"
+            animate={{
+              y: [0, 20, 0],
+              rotate: [0, -5, 0],
             }}
             transition={{
               duration: 8,
@@ -56,22 +68,10 @@ const AdminLogin = () => {
             }}
           />
           <motion.div
-            className="shape shape-2"
-            animate={{
-              y: [0, 30, 0],
-              rotate: [0, -6, 0],
-            }}
-            transition={{
-              duration: 10,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-          <motion.div
             className="shape shape-3"
             animate={{
-              y: [0, -20, 0],
-              rotate: [0, 4, 0],
+              y: [0, -15, 0],
+              rotate: [0, 3, 0],
             }}
             transition={{
               duration: 7,
@@ -109,8 +109,10 @@ const AdminLogin = () => {
         <form onSubmit={handleSubmit} className="admin-login-form">
           {error && (
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
               className="error-message"
             >
               {error}

@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { FiMail, FiPhone, FiMapPin, FiClock } from 'react-icons/fi';
 import ScrollAnimation from '../../ScrollAnimation';
 import './ContactInfo.css';

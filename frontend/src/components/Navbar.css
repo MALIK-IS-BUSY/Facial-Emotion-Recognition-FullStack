@@ -11,13 +11,15 @@
 }
 
 .navbar.scrolled {
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 20px var(--shadow);
+  backdrop-filter: blur(20px);
+  background: var(--bg-primary);
 }
 
 .navbar-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem 2rem;
+  padding: 1rem clamp(1rem, 3vw, 2rem);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -33,12 +35,12 @@
 }
 
 .logo-text {
-  font-size: 1.5rem;
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
   letter-spacing: 2px;
 }
 
 .logo-subtitle {
-  font-size: 0.7rem;
+  font-size: clamp(0.6rem, 1.5vw, 0.7rem);
   font-weight: 400;
   opacity: 0.7;
   letter-spacing: 1px;
@@ -59,7 +61,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 2vw, 1rem);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -80,8 +82,13 @@
   transition: var(--transition);
 }
 
+.navbar-link:hover {
+  color: var(--accent);
+}
+
 .navbar-link:hover::after {
   width: 100%;
+  height: 3px;
 }
 
 .signup-link {
@@ -160,6 +167,7 @@
 @media (max-width: 768px) {
   .navbar-toggle {
     display: block;
+    font-size: 1.3rem;
   }
 
   .navbar-menu {
@@ -174,6 +182,7 @@
     padding-top: 2rem;
     transition: var(--transition);
     border-top: 1px solid var(--border);
+    overflow-y: auto;
   }
 
   .navbar-menu.active {
@@ -184,6 +193,26 @@
     padding: 1rem;
     width: 100%;
     text-align: center;
+    font-size: 1rem;
+  }
+
+  .signup-link {
+    margin: 0 1rem;
+    width: calc(100% - 2rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-container {
+    padding: 0.75rem 1rem;
+  }
+
+  .logo-text {
+    font-size: 1rem;
+  }
+
+  .logo-subtitle {
+    font-size: 0.55rem;
   }
 }
 

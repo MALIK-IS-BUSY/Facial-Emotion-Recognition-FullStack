@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiUser, FiMail, FiClock, FiLogIn, FiLogOut, FiEdit2, FiSave, FiX, FiArrowLeft, FiShield, FiActivity } from 'react-icons/fi';
 import EmotionCharts from '../components/EmotionCharts';
+import ScrollAnimation from '../components/ScrollAnimation';
 import api from '../utils/api';
 import './Profile.css';
 
@@ -99,12 +100,7 @@ const Profile = () => {
   return (
     <div className="profile-page">
       <div className="container">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="profile-container"
-        >
+        <ScrollAnimation direction="up" className="profile-container">
           <div className="profile-header">
             <button className="back-button" onClick={() => navigate('/dashboard')}>
               <FiArrowLeft /> Back to Dashboard
@@ -316,7 +312,7 @@ const Profile = () => {
             </div>
             {user && <EmotionCharts userId={user.id} />}
           </div>
-        </motion.div>
+        </ScrollAnimation>
       </div>
     </div>
   );

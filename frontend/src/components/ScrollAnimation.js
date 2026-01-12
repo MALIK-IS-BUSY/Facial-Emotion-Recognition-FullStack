@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion, useInView, useAnimation } from 'framer-motion';
 
 const ScrollAnimation = ({ 
@@ -58,4 +58,5 @@ const ScrollAnimation = ({
 };
 
 export default ScrollAnimation;
+
 
