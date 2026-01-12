@@ -17,6 +17,10 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.set('trust proxy', true);
 
 // Routes
+app.get('/', (req, res) => {
+  res.send('🎉 Backend is running successfully!');
+});
+
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/admin', require('./routes/admin'));
