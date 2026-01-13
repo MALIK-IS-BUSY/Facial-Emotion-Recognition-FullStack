@@ -23,42 +23,13 @@ CORS(app)
 # ================== MODEL CONFIG ==================
 # Use model from face-emotion-model folder (parent directory)
 # Get the absolute path of this file's directory
-# CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-# # Go up one level to get the project root
-# PROJECT_ROOT = os.path.dirname(CURRENT_DIR)
-# # Model is in face-emotion-model folder
-# MODEL_DIR = os.path.join(PROJECT_ROOT, "face-emotion-model")
-# MODEL_PATH = os.path.join(MODEL_DIR, "affectnet_mobilenetv2.h5")
-# LABELS_JSON = os.path.join(MODEL_DIR, "labels.json")
-
-# ================== MODEL CONFIG ==================
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-
-# Possible model locations (ordered by priority)
-POSSIBLE_MODEL_DIRS = [
-    os.path.join(CURRENT_DIR, "..", "face-emotion-model"),   # local dev
-    os.path.join(CURRENT_DIR, "face-emotion-model"),         # fallback
-    "/app/face-emotion-model",                                # container
-]
-
-MODEL_DIR = None
-for path in POSSIBLE_MODEL_DIRS:
-    path = os.path.abspath(path)
-    if os.path.exists(path):
-        MODEL_DIR = path
-        break
-
-if MODEL_DIR is None:
-    raise FileNotFoundError("❌ face-emotion-model folder not found")
-
+# Go up one level to get the project root
+PROJECT_ROOT = os.path.dirname(CURRENT_DIR)
+# Model is in face-emotion-model folder
+MODEL_DIR = os.path.join(PROJECT_ROOT, "face-emotion-model")
 MODEL_PATH = os.path.join(MODEL_DIR, "affectnet_mobilenetv2.h5")
 LABELS_JSON = os.path.join(MODEL_DIR, "labels.json")
-
-IMG_SIZE = (224, 224)
-# ==================================================
-
-
-
 IMG_SIZE = (224, 224)
 
 # EMA smoothing configuration

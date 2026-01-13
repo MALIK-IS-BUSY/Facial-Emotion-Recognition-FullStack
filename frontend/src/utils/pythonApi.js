@@ -2,8 +2,8 @@ import axios from 'axios';
 
 // Python API URL (Flask server)
 // Default to localhost:8000, but can be overridden via environment variable
-// const PYTHON_API_URL = process.env.REACT_APP_PYTHON_API_URL || 'http://localhost:8000';
-const PYTHON_API_URL = 'https://fermodel.up.railway.app';
+const PYTHON_API_URL = process.env.REACT_APP_PYTHON_API_URL || 'http://localhost:8000';
+// const PYTHON_API_URL = 'https://fermodel.up.railway.app';
 
 const pythonApi = axios.create({
   baseURL: PYTHON_API_URL,
