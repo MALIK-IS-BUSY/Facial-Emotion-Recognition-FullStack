@@ -1,6 +1,8 @@
 import React from 'react';
 import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
 import ScrollAnimation from '../../ScrollAnimation';
+import FarhanImg from './Farhan.jpeg'; // <-- new line
+import AbdullahImg from './Abdullah.jpeg'; // <-- new line
 import './Team.css';
 
 const Team = () => {
@@ -8,7 +10,7 @@ const Team = () => {
     {
       name: 'Malik Abdullah',
       role: 'Lead Developer & AI Engineer',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=600&fit=crop&q=80',
+      image: AbdullahImg,
       bio: 'Passionate about AI and machine learning, Malik specializes in deep learning models and neural networks. With years of experience in computer vision and emotion recognition systems.',
       social: {
         github: 'https://github.com',
@@ -19,7 +21,7 @@ const Team = () => {
     {
       name: 'Malik M. Farhan',
       role: 'Full Stack Developer & Designer',
-      image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&h=600&fit=crop&q=80',
+      image: FarhanImg,
       bio: 'Expert in full-stack development and UI/UX design, creating beautiful and functional web applications. Specializes in modern web technologies and user experience optimization.',
       social: {
         github: 'https://github.com',
